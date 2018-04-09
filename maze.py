@@ -67,8 +67,12 @@ def incr_search(maze, target, start_point=(1,1), max_its=1000,
         if directed:
             nearest = min(paths, key=lambda x: get_proximity(paths[x][-1], target))
             temp_var = paths
-            paths =  {nearest:paths[nearest]}
-            if _debug: print("Closest path:\n", pathset)
+            paths =  {nearest:temp_var[nearest]}
+            if _debug:
+                print("\nDirected search. Closest path:".ljust(pad), end="")
+                print("{}".format(str(nearest+100)[-2:]).ljust(3))
+                if len(temp_var[nearest]) > 5: print("...", end="")
+                print(temp_var[nearest][-5:])
 
         for path in paths:
 
@@ -130,6 +134,10 @@ def incr_search(maze, target, start_point=(1,1), max_its=1000,
             # add all neighbours to the log of seen tiles
             tiles_seen.update(neighbours)
             if _debug: last_tiles_seen.extend(neighbours)
+
+        # switch the vars back if directed search
+        if directed:
+            paths = temp_var
 
         its += 1
         # Now the iteration is over can update the paths dictionary
